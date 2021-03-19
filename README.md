@@ -12,7 +12,7 @@
 进入[此脚本GreasyFork]()页面点击install按钮 
 
 方法二: 通过本地安装
-1. 下载 `bilibili-hd-avatar-inspect-script.js` 到本地
+1. 下载 `bilibili hd avatar inspect script.js` 到本地
 2. 然后右键 `TamperMonkey` 点击选项, 然后点击加号新建脚本
 3. 将下载的脚本内容粘贴进去
 4. 按下Ctrl+S保存
