@@ -7,7 +7,7 @@
 ## 使用方法
 1. 下载并安装[Chrome](https://www.google.com/chrome/)或Chromium核心的浏览器
 2. 下载并安装[TamperMonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)扩展 
-3. 安装脚本
+3. 安装脚本  
 方法一: 通过[GreasyFork](https://greasyfork.org/zh-CN)安装
 进入[此脚本GreasyFork]()页面点击install按钮 
 
