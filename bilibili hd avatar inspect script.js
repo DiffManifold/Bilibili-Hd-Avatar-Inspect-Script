@@ -32,24 +32,14 @@
     // 工具函数
     // 判断一个变量是否是对象(而不是数组)
     function isTrueObject(any) {
-        if (typeof any === 'object' && !Array.isArray(any)) {
-            return true
-        } else {
-            return false
-        }
+        return Object.prototype.toString.call(any) == '[object Object]';
     }
 
     // 判断一个对象是否为空
     function isEmptyObject(obj) {
-        if (isTrueObject(obj)) {
-            if (Object.keys(obj).length === 0) {
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return false
-        }
+        return isTrueObject(obj) ?
+            (Object.keys(obj).length == 0) :
+            false;
     }
 
     // 弹出警告框并抛出错误
@@ -61,8 +51,8 @@
     // 修改元素节点的css样式
     function css(element, config) {
         if (isTrueObject(config) && !isEmptyObject(config)) {
-            for (let key in config) {
-                element.style[key] = config[key]
+            for (let [key, value] of Object.entries(config)) {
+                element.style[key] = value
             }
         } else {
             alterThenThrow('css函数参数错误')
@@ -82,9 +72,8 @@
         css(document.getElementById('hd-avatar-div'), { display: 'block' })
     }
 
-
-    // 页面加载完 正式运行脚本
-    window.onload = function () {
+    // 正式运行脚本
+    function work() {
         // 获取相应的DOM节点
         const userInfoDiv = document.querySelector('.h-basic div')
         const avatarImg = document.querySelector('#h-avatar')
@@ -218,4 +207,10 @@
             }
         })    
     }
+
+    document.body.addEventListener('load', e => {
+        if (e.target.id == 'h-avatar') {
+            work()
+        }
+    }, true)
 })();
