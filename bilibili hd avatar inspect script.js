@@ -32,24 +32,14 @@
     // 工具函数
     // 判断一个变量是否是对象(而不是数组)
     function isTrueObject(any) {
-        if (typeof any === 'object' && !Array.isArray(any)) {
-            return true
-        } else {
-            return false
-        }
+        return Object.prototype.toString.call(any) === '[object Object]'
     }
 
     // 判断一个对象是否为空
     function isEmptyObject(obj) {
-        if (isTrueObject(obj)) {
-            if (Object.keys(obj).length === 0) {
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return false
-        }
+        return isTrueObject(obj)
+            ? (Object.keys(obj).length) === 0
+            : false
     }
 
     // 弹出警告框并抛出错误
@@ -61,8 +51,8 @@
     // 修改元素节点的css样式
     function css(element, config) {
         if (isTrueObject(config) && !isEmptyObject(config)) {
-            for (let key in config) {
-                element.style[key] = config[key]
+            for (const [key, value] of Object.entries(config)) {
+                element.style[key] = value
             }
         } else {
             alterThenThrow('css函数参数错误')
@@ -84,7 +74,7 @@
 
 
     // 页面加载完 正式运行脚本
-    window.onload = function () {
+    function work() {
         // 获取相应的DOM节点
         const userInfoDiv = document.querySelector('.h-basic div')
         const avatarImg = document.querySelector('#h-avatar')
@@ -95,7 +85,7 @@
 
         // 创建查看头像按钮
         let inspectAvatarButton = document.createElement('div')
-        
+
         // 配置查看头像按钮的属性和样式
         inspectAvatarButton.id = 'inspect-avatar-button'
         inspectAvatarButton.innerText = '查看头像'
@@ -169,17 +159,15 @@
                     // 高清头像img装载进div
                     hdAvatarDiv.appendChild(hdAvatarImg)
 
-                    
-
                     // 高清头像右上角叉的base64编码
-                    const unfocusedCloseButtonSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAASCAYAAAC5DOVpAAAACXBIWXMAAAsTAAALEwEAmpwYAAAGrGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQjk3QUY1OEZBNUJFMzExQjExOTg2REFEMkRFM0JFMyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmE1MGFlMWZjLThjYzQtMTc0ZS1iYTQyLThhYjYwM2YzOGQ3ZiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2MzA5MThjNy02ZjRjLTdmNGUtYTg3Yi05YmMwYmE1NDRmYjkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSIgeG1wOkNyZWF0ZURhdGU9IjIwMjEtMDMtMTlUMjI6MzM6MjYrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIxLTAzLTE5VDIyOjM1KzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIxLTAzLTE5VDIyOjM1KzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MUU3NzQwNTYwQTVDRTMxMTk5MUZCNjY5N0M1Qjg0RDUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0I5N0FGNThGQTVCRTMxMUIxMTk4NkRBRDJERTNCRTMiLz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZiZmE4NzQtOGMwMC0zZDRmLWIxMWQtN2NlYzFhNjAzYTI1IiBzdEV2dDp3aGVuPSIyMDIxLTAzLTE5VDIyOjM1KzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MzA5MThjNy02ZjRjLTdmNGUtYTg3Yi05YmMwYmE1NDRmYjkiIHN0RXZ0OndoZW49IjIwMjEtMDMtMTlUMjI6MzUrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+bWcI6wAAAHBJREFUOI3N1FEOgDAIA1Dq/e9cv0zmBi2amcg3eYEBA8nYFcc26VMMAAG0+s5ybxhJXIkOGvNTrANWUIopUEElloEOioiA27OxOgXJyt6ExObW3JRLbIY6YIpVj+3ABXNTU+ByTgpyoF2NJ/HfL+gEDzRWIzgJEQgAAAAASUVORK5CYII='
+                    const unHoverCloseButtonSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAASCAYAAAC5DOVpAAAACXBIWXMAAAsTAAALEwEAmpwYAAAGrGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQjk3QUY1OEZBNUJFMzExQjExOTg2REFEMkRFM0JFMyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmE1MGFlMWZjLThjYzQtMTc0ZS1iYTQyLThhYjYwM2YzOGQ3ZiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2MzA5MThjNy02ZjRjLTdmNGUtYTg3Yi05YmMwYmE1NDRmYjkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSIgeG1wOkNyZWF0ZURhdGU9IjIwMjEtMDMtMTlUMjI6MzM6MjYrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIxLTAzLTE5VDIyOjM1KzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIxLTAzLTE5VDIyOjM1KzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MUU3NzQwNTYwQTVDRTMxMTk5MUZCNjY5N0M1Qjg0RDUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0I5N0FGNThGQTVCRTMxMUIxMTk4NkRBRDJERTNCRTMiLz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MjZiZmE4NzQtOGMwMC0zZDRmLWIxMWQtN2NlYzFhNjAzYTI1IiBzdEV2dDp3aGVuPSIyMDIxLTAzLTE5VDIyOjM1KzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MzA5MThjNy02ZjRjLTdmNGUtYTg3Yi05YmMwYmE1NDRmYjkiIHN0RXZ0OndoZW49IjIwMjEtMDMtMTlUMjI6MzUrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+bWcI6wAAAHBJREFUOI3N1FEOgDAIA1Dq/e9cv0zmBi2amcg3eYEBA8nYFcc26VMMAAG0+s5ybxhJXIkOGvNTrANWUIopUEElloEOioiA27OxOgXJyt6ExObW3JRLbIY6YIpVj+3ABXNTU+ByTgpyoF2NJ/HfL+gEDzRWIzgJEQgAAAAASUVORK5CYII='
 
-                    const focusedCloseButtonSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAASCAIAAAA2bnI+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGuGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQjk3QUY1OEZBNUJFMzExQjExOTg2REFEMkRFM0JFMyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjEwNjJhM2ZmLTc2MDktN2M0Ny04MDYyLThiMmIzNWQ2ZDlkZSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpjOTJhMGVmMC0yZGYxLTAyNDEtODBiZi03YTMwMTk0MDllYWMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSIgeG1wOkNyZWF0ZURhdGU9IjIwMjEtMDMtMTlUMjI6MzM6MjYrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIxLTAzLTE5VDIyOjM1OjUzKzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIxLTAzLTE5VDIyOjM1OjUzKzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MUU3NzQwNTYwQTVDRTMxMTk5MUZCNjY5N0M1Qjg0RDUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0I5N0FGNThGQTVCRTMxMUIxMTk4NkRBRDJERTNCRTMiLz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6NjQ4NmQ5ZDMtZDk4Ny02ZjQyLWE0ZTQtNGU0NjA3NmRlYmU0IiBzdEV2dDp3aGVuPSIyMDIxLTAzLTE5VDIyOjM1OjUzKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDpjOTJhMGVmMC0yZGYxLTAyNDEtODBiZi03YTMwMTk0MDllYWMiIHN0RXZ0OndoZW49IjIwMjEtMDMtMTlUMjI6MzU6NTMrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+rutM1QAAAHJJREFUOI2lkzEOwCAIRdUOOHoTwuj9r+TgRgdNh5bol/6N+J5oAlettbXWew9wSikiEogId574rE9UVVWdwOJse69N7DWTQ7UXvdDiQp5EtJmEPgM0R8PRzfNJs0Q1VHZOwq/pO0vO2WclZj5dNiJi5hsaAn1s2riTjgAAAABJRU5ErkJggg=='
+                    const onHoverCloseButtonSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAASCAIAAAA2bnI+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGuGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQjk3QUY1OEZBNUJFMzExQjExOTg2REFEMkRFM0JFMyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjEwNjJhM2ZmLTc2MDktN2M0Ny04MDYyLThiMmIzNWQ2ZDlkZSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpjOTJhMGVmMC0yZGYxLTAyNDEtODBiZi03YTMwMTk0MDllYWMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSIgeG1wOkNyZWF0ZURhdGU9IjIwMjEtMDMtMTlUMjI6MzM6MjYrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIxLTAzLTE5VDIyOjM1OjUzKzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIxLTAzLTE5VDIyOjM1OjUzKzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MUU3NzQwNTYwQTVDRTMxMTk5MUZCNjY5N0M1Qjg0RDUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0I5N0FGNThGQTVCRTMxMUIxMTk4NkRBRDJERTNCRTMiLz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6NjQ4NmQ5ZDMtZDk4Ny02ZjQyLWE0ZTQtNGU0NjA3NmRlYmU0IiBzdEV2dDp3aGVuPSIyMDIxLTAzLTE5VDIyOjM1OjUzKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDpjOTJhMGVmMC0yZGYxLTAyNDEtODBiZi03YTMwMTk0MDllYWMiIHN0RXZ0OndoZW49IjIwMjEtMDMtMTlUMjI6MzU6NTMrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+rutM1QAAAHJJREFUOI2lkzEOwCAIRdUOOHoTwuj9r+TgRgdNh5bol/6N+J5oAlettbXWew9wSikiEogId574rE9UVVWdwOJse69N7DWTQ7UXvdDiQp5EtJmEPgM0R8PRzfNJs0Q1VHZOwq/pO0vO2WclZj5dNiJi5hsaAn1s2riTjgAAAABJRU5ErkJggg=='
 
                     // 创建关闭按钮
                     let closeButton = document.createElement('img')
                     // 设置关闭按钮默认图片和样式 (未聚焦)
-                    closeButton.src = unfocusedCloseButtonSrc
+                    closeButton.src = unHoverCloseButtonSrc
                     css(closeButton, {
                         position: 'absolute',
                         top: '10px',
@@ -191,12 +179,12 @@
 
                     // 关闭按钮默认图片聚焦时
                     closeButton.addEventListener('mouseenter', function () {
-                        closeButton.src = focusedCloseButtonSrc
+                        closeButton.src = onHoverCloseButtonSrc
                     })
 
                     // 关闭按钮默认图片未聚焦时
                     closeButton.addEventListener('mouseleave', function () {
-                        closeButton.src = unfocusedCloseButtonSrc
+                        closeButton.src = unHoverCloseButtonSrc
                     })
 
                     // 点击关闭按钮图片关闭高清头像显示
@@ -216,6 +204,12 @@
                     showHdAvatar()
                 }
             }
-        })    
+        })
     }
+
+    document.body.addEventListener('load', e => {
+        if (e.target.id == 'h-avatar') {
+            work()
+        }
+    }, true)
 })();
