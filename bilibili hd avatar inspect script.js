@@ -3,7 +3,7 @@
 // @namespace    https://github.com/YouMoeYi/bilibili-hd-avatar-inspect-script
 // @namespace    https://greasyfork.org/zh-CN/scripts/423589-%E6%9F%A5%E7%9C%8Bb%E7%AB%99%E7%94%A8%E6%88%B7%E9%AB%98%E6%B8%85%E5%A4%B4%E5%83%8F
 // @email        hy.s@foxmail.com
-// @version      1.1
+// @version      1.2
 // @description  查看B站用户高清头像 可自由配置
 // @author       YouMoeYi
 // @match        https://space.bilibili.com/*
