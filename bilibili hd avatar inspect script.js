@@ -21,7 +21,7 @@
     const config = {
         // 是否在新标签页打开头像 推荐 false
         isOpenInNewTab: false,
-        // 高清头像的大小 单位px 推荐 480/360/240 
+        // 高清头像的大小 单位px 推荐 480/360/240
         hdAvatarSize: 360,
         // 警告文本前缀
         alertTextPrefix: '查看B站用户高清头像脚本: ',
@@ -74,7 +74,7 @@
 
 
     // 页面加载完 正式运行脚本
-    function work() {
+    function main() {
         // 获取相应的DOM节点
         const userInfoDiv = document.querySelector('.h-basic div')
         const avatarImg = document.querySelector('.avatar-container .bili-avatar img.bili-avatar-img')
@@ -207,9 +207,5 @@
         })
     }
 
-    document.body.addEventListener('load', e => {
-        if (e.target.id == 'h-avatar') {
-            work()
-        }
-    }, true)
+    window.addEventListener('load', main)
 })();
