@@ -77,7 +77,7 @@
     function work() {
         // 获取相应的DOM节点
         const userInfoDiv = document.querySelector('.h-basic div')
-        const avatarImg = document.querySelector('#h-avatar')
+        const avatarImg = document.querySelector('.avatar-container .bili-avatar img.bili-avatar-img')
 
         // 获取头像URL
         let avatarImgUrl = avatarImg.src
